@@ -5,16 +5,16 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -O2
 
 # Source files
-SRC = lab1.cpp perf_event_open.cpp utils.cpp
-SRC_2 = main.cpp mem_access.cpp perf_event_open.cpp utils.cpp
+SRC = task12.cpp perf_event_open.cpp utils.cpp
+SRC_2 = task3.cpp mem_access.cpp perf_event_open.cpp utils.cpp
 
 # Header files
 HEADERS = perf_event_open.hpp utils.hpp
 HEADERS_2 = perf_event_open.hpp mem_access.hpp utils.hpp
 
 # Output executable
-TARGET = lab1
-TARGET_2 = main
+TARGET = task12
+TARGET_2 = task3
 
 # Default rule to build the executable
 all: $(TARGET) $(TARGET_2)
