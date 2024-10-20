@@ -23,18 +23,21 @@ static void print_usage(const char* prog_name) {
               << "  -p                Use MAP_PRIVATE\n"
               << "                    (Mutually exclusive with -m)\n"
               << "  -m                Use MAP_SHARED\n"
+              << "  -e                Use memset after mmap\n"
+              << "  -S                Use msync after memset\n"
               << "  -h                Show this help message\n";
 }
 
-static int parse_argv(int argc, char **argv, std::string &file_name, bool &sequential, bool &random, bool &anonymous,
-                    bool &file_backed, bool &private_mapping, bool &shared_mapping, bool &populate) {
+static int parse_argv(int argc, char **argv, std::string &file_name, bool &sequential,
+                      bool &random, bool &anonymous, bool &file_backed, bool &private_mapping,
+                      bool &shared_mapping, bool &populate, bool &should_memset, bool &should_msync) {
     file_name.clear();
     sequential = false, random = false;
     anonymous = false, file_backed = false;
     private_mapping = false, shared_mapping = false, populate = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, "f:srampP")) != -1) {
+    while ((opt = getopt(argc, argv, "f:srampPeS")) != -1) {
         switch (opt) {
             case 'h':
                 return 1;
@@ -95,10 +98,18 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
             case 'P':
                 if (anonymous) {
                     std::cerr << "Error: Options -P (Populate) and -a (anonymous) are mutually exclusive.\n";
+                    return 1;
                 }
                 populate = true;
                 break;
 
+            case 'e':
+                should_memset = true;
+                break;
+
+            case 'S':
+                should_msync = true;
+                break;
             // Invalid option handling
             default:
                 std::cerr << "Invalid option. Use -h for help.\n";
@@ -118,7 +129,6 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
         std::cerr << "Error: When using -f (file_backed), either -p (private_mapping) or -m (shared_mapping) is required\n";
         return 1;
     }
-
     return 0;
 }
 
@@ -127,6 +137,7 @@ int main(int argc, char** argv) {
     bool sequential = false, random = false;
     bool anonymous = false, file_backed = false;
     bool private_mapping = false, shared_mapping = false, populate = false;
+    bool should_memset = false, should_msync = false;
     std::string file_name;
 
     int flags = 0;
@@ -137,14 +148,15 @@ int main(int argc, char** argv) {
     long long l1_access_cnt, l1_miss_cnt, tlb_miss_cnt;
     int ret = -1;
 
-    if (0 != parse_argv(argc, argv, file_name, sequential, random, anonymous, file_backed, private_mapping, shared_mapping, populate)) {
+    if (0 != parse_argv(argc, argv, file_name, sequential, random, anonymous,
+                        file_backed, private_mapping, shared_mapping, populate,
+                        should_memset, should_msync)) {
         print_usage(argv[0]);
         return ret;
     }
 
     if (anonymous) {
         flags |= MAP_ANONYMOUS | MAP_PRIVATE;
-        std::cout << "anonymous\n";
     } else {
         if (private_mapping) {
             flags |= MAP_PRIVATE;
@@ -170,6 +182,13 @@ int main(int argc, char** argv) {
     if (addr == MAP_FAILED) {
         std::cerr << "mmap failed: " << strerror(errno) << "\n";
         goto End;
+    }
+
+    if (should_memset) {
+        memset(addr, 0, sizeof(mmap_size));
+    }
+    if (should_msync) {
+        msync(addr, mmap_size, MS_SYNC);
     }
 
     std::cout << "mmap succeeded. Address: " << addr << "\n";

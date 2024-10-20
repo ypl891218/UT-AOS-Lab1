@@ -1,0 +1,86 @@
+./task4 -a -s\n
+anonymous
+mmap succeeded. Address: 0x7f722118a000
+L1 Accesses: 7521030184
+L1 Misses: 891102413
+TLB Misses: 607150
+User time: Seconds: 7, Microseconds: 493347
+System time: Seconds: 0, Microseconds: 380271
+Max resident set size: 1051824
+Page reclaims (soft page faults): 262305
+Page faults (hard page faults): 0
+Block input operations: 0
+Block output operations: 8
+Voluntary context switches: 1
+Involuntary context switches: 15
+./task -a -r\n
+anonymous
+mmap succeeded. Address: 0x7f200b454000
+L1 Accesses: 7521510837
+L1 Misses: 906134991
+TLB Misses: 3799343
+User time: Seconds: 7, Microseconds: 802935
+System time: Seconds: 0, Microseconds: 563923
+Max resident set size: 1051952
+Page reclaims (soft page faults): 466575
+Page faults (hard page faults): 0
+Block input operations: 0
+Block output operations: 8
+Voluntary context switches: 0
+Involuntary context switches: 17
+./task4 -f 1gb_file -s -p\n
+mmap succeeded. Address: 0x7faf83467000
+L1 Accesses: 7521037461
+L1 Misses: 890932461
+TLB Misses: 566723
+User time: Seconds: 7, Microseconds: 378361
+System time: Seconds: 0, Microseconds: 479893
+Max resident set size: 1051812
+Page reclaims (soft page faults): 262308
+Page faults (hard page faults): 0
+Block input operations: 0
+Block output operations: 8
+Voluntary context switches: 0
+Involuntary context switches: 13
+./task4 -f 1gb_file -s -m\n
+mmap succeeded. Address: 0x7f8971a3a000
+L1 Accesses: 7521075444
+L1 Misses: 909209706
+TLB Misses: 2670062
+User time: Seconds: 7, Microseconds: 454106
+System time: Seconds: 0, Microseconds: 340096
+Max resident set size: 1051908
+Page reclaims (soft page faults): 171
+Page faults (hard page faults): 263160
+Block input operations: 0
+Block output operations: 2105288
+Voluntary context switches: 0
+Involuntary context switches: 16
+./task4 -f 1gb_file -r -p\n
+mmap succeeded. Address: 0x7efc9152f000
+L1 Accesses: 7521151615
+L1 Misses: 910671757
+TLB Misses: 2803315
+User time: Seconds: 7, Microseconds: 594207
+System time: Seconds: 0, Microseconds: 564163
+Max resident set size: 1051996
+Page reclaims (soft page faults): 278676
+Page faults (hard page faults): 0
+Block input operations: 0
+Block output operations: 0
+Voluntary context switches: 0
+Involuntary context switches: 17
+./task4 -f 1gb_file -r -m\n
+mmap succeeded. Address: 0x7f94162ca000
+L1 Accesses: 7521154977
+L1 Misses: 920038900
+TLB Misses: 3056015
+User time: Seconds: 7, Microseconds: 653014
+System time: Seconds: 0, Microseconds: 364048
+Max resident set size: 1051940
+Page reclaims (soft page faults): 16534
+Page faults (hard page faults): 262144
+Block input operations: 0
+Block output operations: 2097152
+Voluntary context switches: 0
+Involuntary context switches: 18
