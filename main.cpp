@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sched.h>
 
+#include "utils.hpp"
 #include "mem_access.hpp"
 #include "perf_event_open.hpp"
 
@@ -56,6 +57,8 @@ int main() {
     std::cout << "L1 Accesses: " << l1_access_cnt << std::endl;
     std::cout << "L1 Misses: " << l1_miss_cnt << std::endl;
     std::cout << "TLB Misses: " << tlb_miss_cnt << std::endl;
+
+    printRUsage();
     ret = 0;
 
 End:

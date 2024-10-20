@@ -4,18 +4,10 @@
 #include <cstring>
 #include <unordered_map>
 #include <unistd.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-
+#include "utils.hpp"
 #include "perf_event_open.hpp"
 
 using namespace std;
-
-void printTimeval(const timeval &tv) {
-    std::cout << "Seconds: " << tv.tv_sec 
-              << ", Microseconds: " << tv.tv_usec 
-              << std::endl;
-}
 
 int printProcMap() {
     std::ifstream maps_file("/proc/self/maps");
@@ -31,29 +23,6 @@ int printProcMap() {
     }
 
     maps_file.close();
-    return 0;
-}
-
-int printRUsage() {
-    struct rusage usage;
-    if (getrusage(RUSAGE_SELF, &usage) != 0) {
-        std::cerr << "Error calling getrusage: " << strerror(errno) << std::endl;
-       return 1;	
-    }
-    
-    std::cout << "User time: ";
-    printTimeval(usage.ru_utime);
-    
-    std::cout << "System time: ";
-    printTimeval(usage.ru_stime);
-
-    std::cout << "Max resident set size: " << usage.ru_maxrss << endl;
-    std::cout << "Page reclaims (soft page faults): " << usage.ru_minflt << endl;
-    std::cout << "Page faults (hard page faults): " << usage.ru_majflt << endl;
-    std::cout << "Block input operations: " << usage.ru_inblock << endl;
-    std::cout << "Block output operations: " << usage.ru_oublock << endl;
-    std::cout << "Voluntary context switches: " << usage.ru_nvcsw << endl;
-    std::cout << "Involuntary context switches: " << usage.ru_nivcsw << endl;
     return 0;
 }
 
