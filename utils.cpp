@@ -31,4 +31,14 @@ int printRUsage() {
     return 0;
 }
 
+int fixToCPU0() {
+    cpu_set_t cpu_set;
+    CPU_ZERO(&cpu_set);
+    CPU_SET(0, &cpu_set);
 
+    if (sched_getaffinity(0, sizeof(cpu_set_t), &cpu_set) != 0) {
+	std::cerr << "sched_getaffinity() failed: " << strerror(errno) << std::endl;
+	return 1;
+    }
+    return 0;
+}

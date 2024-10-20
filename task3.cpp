@@ -16,13 +16,8 @@ int main() {
     int fd_tlb_miss = -1;
     std::unique_ptr<char[]> buffer;
     
-    cpu_set_t cpu_set;
-    CPU_ZERO(&cpu_set);
-    CPU_SET(0, &cpu_set);
-
-    if (sched_getaffinity(0, sizeof(cpu_set_t), &cpu_set) != 0) {
-	std::cerr << "sched_getaffinity() failed: " << strerror(errno) << std::endl;
-	return ret;
+    if (fixToCPU0() != 0) {
+    	return ret;
     }
 
     if ((fd_l1_access = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_ACCESS)) == -1 ||
@@ -34,16 +29,16 @@ int main() {
 
     if (beginRecordPerfEvent(fd_l1_access) != 0 ||
         beginRecordPerfEvent(fd_l1_miss) != 0 ||
-	beginRecordPerfEvent(fd_tlb_miss) != 0) {
+		beginRecordPerfEvent(fd_tlb_miss) != 0) {
         goto End;
     }
 
     buffer = std::make_unique<char[]>(1<<30);
-    do_mem_access(buffer.get(), 1<<30);
+    do_mem_access(buffer.get(), 1<<30, true);
 
     if (endRecordPerfEvent(fd_l1_access) != 0 ||
-	endRecordPerfEvent(fd_l1_miss) != 0 ||
-	endRecordPerfEvent(fd_tlb_miss) != 0) {
+		endRecordPerfEvent(fd_l1_miss) != 0 ||
+		endRecordPerfEvent(fd_tlb_miss) != 0) {
         goto End;
     }
 

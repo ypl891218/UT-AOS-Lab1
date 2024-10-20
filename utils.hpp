@@ -5,5 +5,5 @@
 
 void printTimeval(const timeval &tv);
 int printRUsage();
- 
+int fixToCPU0();
 #endif

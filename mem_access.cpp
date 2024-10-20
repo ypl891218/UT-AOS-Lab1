@@ -14,9 +14,7 @@ long simplerand(void) {
 	return w;
 }
 
-bool opt_random_access = true;
-
-void do_mem_access(char* p, int size) {
+void do_mem_access(char* p, int size, bool opt_random_access) {
    int i, outer, locality;
    int ws_base = 0;
    int max_base = ((size / CACHE_LINE_SIZE) - 512);
