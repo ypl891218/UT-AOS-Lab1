@@ -2,7 +2,7 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Wextra -O2
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 
 # Source files
 SRC = task12.cpp perf_event_open.cpp utils.cpp
