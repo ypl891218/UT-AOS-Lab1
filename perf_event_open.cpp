@@ -53,6 +53,7 @@ int getFdPerfEventOpen(PerfEvents perf_event) {
             pe.type = PERF_TYPE_HW_CACHE;
             pe.config = (PERF_COUNT_HW_CACHE_L1D) | (PERF_COUNT_HW_CACHE_OP_READ << 8) | 
                         (PERF_COUNT_HW_CACHE_RESULT_ACCESS << 16);
+            std::cout << "L1_DATA_READ_ACCESS\n";
             break;
         case PerfEvents::L1_DATA_WRITE_ACCESS:
             pe.type = PERF_TYPE_HW_CACHE;
@@ -68,6 +69,7 @@ int getFdPerfEventOpen(PerfEvents perf_event) {
             pe.type = PERF_TYPE_HW_CACHE;
             pe.config = (PERF_COUNT_HW_CACHE_L1D) | (PERF_COUNT_HW_CACHE_OP_READ << 8) | 
                         (PERF_COUNT_HW_CACHE_RESULT_MISS << 16);
+            std::cout << "L1_DATA_READ_MISS\n";
             break;
         case PerfEvents::L1_DATA_WRITE_MISS:
             pe.type = PERF_TYPE_HW_CACHE;
@@ -83,6 +85,7 @@ int getFdPerfEventOpen(PerfEvents perf_event) {
             pe.type = PERF_TYPE_HW_CACHE;
             pe.config = (PERF_COUNT_HW_CACHE_DTLB) | (PERF_COUNT_HW_CACHE_OP_READ << 8) | 
                         (PERF_COUNT_HW_CACHE_RESULT_MISS << 16);
+            std::cout << "DATA_TLB_READ_MISS\n";
             break;
         case PerfEvents::DATA_TLB_WRITE_MISS:
             pe.type = PERF_TYPE_HW_CACHE;

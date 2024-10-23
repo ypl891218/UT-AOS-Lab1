@@ -1,5 +1,8 @@
+#include <iostream>
 #include <cstddef>
 #include <cstdio>
+#include <cstdlib>
+#include <csignal>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/sysinfo.h>
@@ -56,15 +59,30 @@ static int get_mem_size() {
     return info.totalram;
 }
 
+long mem_size;
+char *p;
+
+void sigtermHandler(int signal) {
+    if (p != nullptr && mem_size > 0) {
+        munmap(p, mem_size); // Unmap the memory
+    }
+    std::cout << "Received signal: " << signal << ", cleaning up..." << std::endl;
+    exit(signal); // Exit the program
+}
+
 int compete_for_memory() {
-   long mem_size = get_mem_size();
+   mem_size = get_mem_size() * 9 / 10;
    int page_sz = sysconf(_SC_PAGE_SIZE);
    printf("Total memsize is %3.2f GBs\n", (double)mem_size/(1024*1024*1024));
    fflush(stdout);
-   char* p = (char*)mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
+
+   p = (char*)mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
                   MAP_NORESERVE|MAP_PRIVATE|MAP_ANONYMOUS, -1, (off_t) 0);
    if (p == MAP_FAILED)
       perror("Failed anon MMAP competition");
+
+    /* added by lyp */
+    std::signal(SIGTERM, sigtermHandler);
 
    int i = 0;
    while(1) {
