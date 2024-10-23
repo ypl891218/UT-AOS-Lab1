@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: yunping
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDKwiVSagkLQTfB3/Ym6jVxJbViuIo03Rn7N0EdXrC//bzeu6Q1ZvzdfbSi6tfHLCXbtfucb2OsD8iKadVkYWHJjx2EaqrvVGxPu/RjbBbqABIkmi+H0hSYnnpFrWR8zTOLmKMoXQuDdTXxxUhh8bT+FKfABOou8zeTPvSqDnZ5wP9I8mNDUWCJnhbehRtzLj0kraNyk6nx/KyRwlolXOyqJmO4rNb1EOmeYFrvV002htLacshZgS/G9w3FYjbbR1LZuF9RBUDf7uQgew2kuzjpKjpT8YNk99AzTqgc4Cw2zL34xwvMSGMgVBIwH/wowkAMkiKtV8AkFRuMoo2GyqEwMImrQhUJXknk3QZV+VqI0TKnmvCM3gGuxuW8ny+bkHjuRqHlcvdsNeabBZvsHj1531/3xm3CyzG9+aL8791us/DwkbCtxRAzoPIym8xTtyDiuiV8UoO9kzkQCOQGQwTQ2eLyr3Zw+2Fnz8gcOg1vpnhx0HIsb5Nt5HKjILnf4DFMn0p7djM9QkDJz1XGRe27kJWgCTKufchOmGjU3AS4WQAVuKOY5YlJbSjn6KlpsC/NUhnWmSJVDfXTqBPCuwJ0e5GaRBAi9RcEKy680imDgvPANqNLGRwPSxZL0ftCMnsZhnVZgWvfOA0hvRBGwSQiriG7S1oaIiVQrdALgdaAHw== yunping@node-0.yunping-225236.utcs-aos-f24-pg0.utah.cloudlab.us
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    shell: /bin/bash
