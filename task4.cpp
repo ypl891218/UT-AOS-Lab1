@@ -25,16 +25,19 @@ static void print_usage(const char* prog_name) {
               << "  -m                Use MAP_SHARED\n"
               << "  -e                Use memset after mmap\n"
               << "  -S                Use msync after memset\n"
+              << "  -c                Compete by forking another porcess\n"
               << "  -h                Show this help message\n";
 }
 
-static int parse_argv(int argc, char **argv, std::string &file_name, bool &sequential,
-                      bool &random, bool &anonymous, bool &file_backed, bool &private_mapping,
-                      bool &shared_mapping, bool &populate, bool &should_memset, bool &should_msync) {
+static int parse_argv(int argc, char **argv, std::string &file_name, bool &sequential, bool &random,
+                      bool &anonymous, bool &file_backed, bool &private_mapping, bool &shared_mapping,
+                      bool &populate, bool &should_memset, bool &should_msync, bool &compete) {
     file_name.clear();
     sequential = false, random = false;
     anonymous = false, file_backed = false;
     private_mapping = false, shared_mapping = false, populate = false;
+    should_memset = false, should_msync = false;
+    compete = false;
 
     int opt;
     while ((opt = getopt(argc, argv, "f:srampPeS")) != -1) {
@@ -110,6 +113,11 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
             case 'S':
                 should_msync = true;
                 break;
+
+            case 'c':
+                compete = true;
+                break;
+
             // Invalid option handling
             default:
                 std::cerr << "Invalid option. Use -h for help.\n";
@@ -134,10 +142,12 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
 
 
 int main(int argc, char** argv) {
+    /* These are arguments */
     bool sequential = false, random = false;
     bool anonymous = false, file_backed = false;
     bool private_mapping = false, shared_mapping = false, populate = false;
     bool should_memset = false, should_msync = false;
+    bool compete = false;
     std::string file_name;
 
     int flags = 0;
@@ -146,11 +156,12 @@ int main(int argc, char** argv) {
     void* addr = nullptr;
     int fd_l1_access = -1, fd_l1_miss = -1, fd_tlb_miss = -1;
     long long l1_access_cnt, l1_miss_cnt, tlb_miss_cnt;
+    pid_t compete_pid;
     int ret = -1;
 
     if (0 != parse_argv(argc, argv, file_name, sequential, random, anonymous,
                         file_backed, private_mapping, shared_mapping, populate,
-                        should_memset, should_msync)) {
+                        should_memset, should_msync, compete)) {
         print_usage(argv[0]);
         return ret;
     }
@@ -176,6 +187,16 @@ int main(int argc, char** argv) {
             goto End;
         }
     } 
+
+    if (compete) {
+        compete_pid = fork();
+        if (compete_pid < 0) {
+            std::cerr << "Fork failed: " << strerror(errno) << "\n";
+            goto End;
+        } else if (pid == 0) {
+            compete_for_memory(nullptr);
+        }
+    }
 
     // Call mmap()
     addr = mmap(nullptr, mmap_size, PROT_READ | PROT_WRITE, flags, fd_file, 0);
@@ -242,6 +263,10 @@ End:
     }
     if (fd_tlb_miss != -1) {
         closeFdPerfEvent(fd_tlb_miss);
+    }
+    if (compete_pid > 0) {
+        kill(compete_pid, SIGTERM);
+        waitpid(compete_pid, nullptr, 0);
     }
     return ret;
 }

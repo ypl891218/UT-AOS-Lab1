@@ -7,12 +7,12 @@ CXXFLAGS = -Wall -Wextra -O2
 # Source files
 SRC = task12.cpp perf_event_open.cpp utils.cpp
 SRC_2 = task3.cpp mem_access.cpp perf_event_open.cpp utils.cpp
-SRC_4 = task4.cpp mem_access.cpp perf_event_open.cpp utils.cpp
+SRC_4 = task4.cpp mem_access.cpp perf_event_open.cpp utils.cpp compete_for_memory.cpp
 
 # Header files
 HEADERS = perf_event_open.hpp utils.hpp
-HEADERS_2 = perf_event_open.hpp mem_access.hpp utils.hpp
-HEADERS_4 = perf_event_open.hpp mem_access.hpp utils.hpp
+HEADERS_2 = perf_event_open.hpp mem_access.hpp utils.hpp 
+HEADERS_4 = perf_event_open.hpp mem_access.hpp utils.hpp compete_for_memory.hpp
 
 # Output executable
 TARGET = task12
