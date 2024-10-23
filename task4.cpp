@@ -42,7 +42,7 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
     compete = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, "f:srampPeS")) != -1) {
+    while ((opt = getopt(argc, argv, "f:srampPeSc")) != -1) {
         switch (opt) {
             case 'h':
                 return 1;
