@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     }
 
     int ret = -1;
-    int fd_perf_event = getFdPerfEventOpen(pe_type);
+    int fd_perf_event = getFdPerfEventOpen(pe_type, -1);
     if (fd_perf_event == -1) {
         return -1;
     }

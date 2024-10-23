@@ -20,7 +20,7 @@ enum class PerfEvents {
 void printPerfEventUsage();
 PerfEvents getPerfEventType(const std::string &str);
 
-int getFdPerfEventOpen(PerfEvents perf_event);
+int getFdPerfEventOpen(PerfEvents perf_event, int cpu_id);
 
 int beginRecordPerfEvent(int fd);
 int endRecordPerfEvent(int fd);

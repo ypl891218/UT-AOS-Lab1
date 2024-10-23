@@ -43,7 +43,7 @@ PerfEvents getPerfEventType(const std::string &str) {
     return stringToPerfEvent.at(str);
 }
 
-int getFdPerfEventOpen(PerfEvents perf_event) {
+int getFdPerfEventOpen(PerfEvents perf_event, int cpu_id) {
     struct perf_event_attr pe;
     memset(&pe, 0, sizeof(perf_event_attr));
     pe.size = sizeof(struct perf_event_attr);
@@ -106,7 +106,7 @@ int getFdPerfEventOpen(PerfEvents perf_event) {
     pe.disabled = 1;
     pe.exclude_kernel = 1;
     pe.exclude_hv = 1;
-    return perf_event_open(&pe, 0, -1, -1, 0);
+    return perf_event_open(&pe, 0, cpu_id, -1, 0);
 }
 
 

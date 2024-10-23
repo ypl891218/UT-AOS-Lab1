@@ -216,9 +216,9 @@ int main(int argc, char** argv) {
 
     std::cout << "mmap succeeded. Address: " << addr << "\n";
 
-    if ((fd_l1_access = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_ACCESS)) == -1 ||
-        (fd_l1_miss = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_MISS)) == -1 ||
-        (fd_tlb_miss = getFdPerfEventOpen(PerfEvents::DATA_TLB_READ_MISS)) == -1) {
+    if ((fd_l1_access = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_ACCESS, -1)) == -1 ||
+        (fd_l1_miss = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_MISS, -1)) == -1 ||
+        (fd_tlb_miss = getFdPerfEventOpen(PerfEvents::DATA_TLB_READ_MISS, -1)) == -1) {
         std::cerr << "Failed to get fd for three perf events" << std::endl;
         goto End;
     }

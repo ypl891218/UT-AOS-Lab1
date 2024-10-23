@@ -9,20 +9,24 @@
 #include "mem_access.hpp"
 #include "perf_event_open.hpp"
 
-int main() {
+int main(int argc, char** argv) {
     int ret = -1;
     int fd_l1_access = -1;
     int fd_l1_miss = -1;
     int fd_tlb_miss = -1;
+    int cpu_id = -1;
+    if (argc >= 2) {
+    	cpu_id = atoi(argv[1]);
+    }
     std::unique_ptr<char[]> buffer;
     
     if (fixToCPU0() != 0) {
     	return ret;
     }
 
-    if ((fd_l1_access = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_ACCESS)) == -1 ||
-        (fd_l1_miss = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_MISS)) == -1 ||
-        (fd_tlb_miss = getFdPerfEventOpen(PerfEvents::DATA_TLB_READ_MISS)) == -1) {
+    if ((fd_l1_access = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_ACCESS, cpu_id)) == -1 ||
+        (fd_l1_miss = getFdPerfEventOpen(PerfEvents::L1_DATA_READ_MISS, cpu_id)) == -1 ||
+        (fd_tlb_miss = getFdPerfEventOpen(PerfEvents::DATA_TLB_READ_MISS, cpu_id)) == -1) {
         std::cerr << "Failed to get fd for three perf events" << std::endl;
         return ret;
     }
