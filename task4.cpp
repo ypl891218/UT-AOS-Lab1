@@ -1,9 +1,11 @@
+#include <csignal>
 #include <iostream>
 #include <string>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/wait.h>
 
 #include "mem_access.hpp"
 #include "perf_event_open.hpp"
@@ -156,7 +158,7 @@ int main(int argc, char** argv) {
     void* addr = nullptr;
     int fd_l1_access = -1, fd_l1_miss = -1, fd_tlb_miss = -1;
     long long l1_access_cnt, l1_miss_cnt, tlb_miss_cnt;
-    pid_t compete_pid;
+    pid_t compete_pid = -1;
     int ret = -1;
 
     if (0 != parse_argv(argc, argv, file_name, sequential, random, anonymous,
@@ -193,8 +195,8 @@ int main(int argc, char** argv) {
         if (compete_pid < 0) {
             std::cerr << "Fork failed: " << strerror(errno) << "\n";
             goto End;
-        } else if (pid == 0) {
-            compete_for_memory(nullptr);
+        } else if (compete_pid == 0) {
+            compete_for_memory();
         }
     }
 
