@@ -6,4 +6,5 @@
 void printTimeval(const timeval &tv);
 int printRUsage();
 int fixToCPU0();
+void print_affinity();
 #endif

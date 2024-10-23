@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <sys/resource.h>
+#include <unistd.h>
 
 void printTimeval(const timeval &tv) {
     std::cout << "Seconds: " << tv.tv_sec 
@@ -36,9 +37,23 @@ int fixToCPU0() {
     CPU_ZERO(&cpu_set);
     CPU_SET(0, &cpu_set);
 
-    if (sched_getaffinity(0, sizeof(cpu_set_t), &cpu_set) != 0) {
+    if (sched_setaffinity(0, sizeof(cpu_set_t), &cpu_set) != 0) {
 	std::cerr << "sched_getaffinity() failed: " << strerror(errno) << std::endl;
 	return 1;
     }
+    std::cout << sched_getcpu() << std::endl;
     return 0;
+}
+
+void print_affinity() {
+    cpu_set_t mask;
+    long nproc, i;
+
+    sched_getaffinity(0, sizeof(cpu_set_t), &mask);
+    nproc = sysconf(_SC_NPROCESSORS_ONLN);
+    printf("sched_getaffinity = ");
+    for (i = 0; i < nproc; i++) {
+        printf("%d ", CPU_ISSET(i, &mask));
+    }
+    printf("\n");
 }
