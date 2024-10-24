@@ -52,7 +52,7 @@ void do_mem_access(char* p, int size, bool opt_random_access) {
       }
    }
 }
-static int get_mem_size() {
+static long get_mem_size() {
     struct sysinfo info;
     sysinfo(&info);
 
@@ -82,7 +82,7 @@ int compete_for_memory() {
       perror("Failed anon MMAP competition");
 
     /* added by lyp */
-    std::signal(SIGTERM, sigtermHandler);
+   std::signal(SIGTERM, sigtermHandler);
 
    int i = 0;
    while(1) {

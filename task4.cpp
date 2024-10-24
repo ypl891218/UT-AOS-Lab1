@@ -200,6 +200,11 @@ int main(int argc, char** argv) {
         }
     }
 
+    if (fixToCPU0() != 0) {
+	std::cerr << "Failed to fix to CPU 0\n";
+	goto End;
+    }
+
     // Call mmap()
     addr = mmap(nullptr, mmap_size, PROT_READ | PROT_WRITE, flags, fd_file, 0);
     if (addr == MAP_FAILED) {
