@@ -9,6 +9,25 @@ void printTimeval(const timeval &tv) {
               << std::endl;
 }
 
+int printRUsageComma() {
+    struct rusage usage;
+    if (getrusage(RUSAGE_SELF, &usage) != 0) {
+        std::cerr << "Error calling getrusage: " << strerror(errno) << std::endl;
+       return 1;	
+    }
+    
+    std::cout << usage.ru_utime.tv_sec << "." << usage.ru_utime.tv_usec << ",";
+    std::cout << usage.ru_stime.tv_sec << "." << usage.ru_stime.tv_usec << ",";
+    std::cout << usage.ru_maxrss << ",";
+    std::cout << usage.ru_minflt << ",";
+    std::cout << usage.ru_majflt << ",";
+    std::cout << usage.ru_inblock << ",";
+    std::cout << usage.ru_oublock << ",";
+    std::cout << usage.ru_nvcsw << ",";
+    std::cout << usage.ru_nivcsw << std::endl;
+    return 0;
+}
+
 int printRUsage() {
     struct rusage usage;
     if (getrusage(RUSAGE_SELF, &usage) != 0) {
@@ -41,7 +60,6 @@ int fixToCPU0() {
 	std::cerr << "sched_getaffinity() failed: " << strerror(errno) << std::endl;
 	return 1;
     }
-    std::cout << sched_getcpu() << std::endl;
     return 0;
 }
 

@@ -53,11 +53,13 @@ int main(int argc, char** argv) {
         goto End;
     } 
 
-    std::cout << "L1 Accesses: " << l1_access_cnt << std::endl;
-    std::cout << "L1 Misses: " << l1_miss_cnt << std::endl;
-    std::cout << "TLB Misses: " << tlb_miss_cnt << std::endl;
+    std::cout << l1_access_cnt << "," << l1_miss_cnt << "," << tlb_miss_cnt << ",";
+    // std::cout << "L1 Accesses: " << l1_access_cnt << std::endl;
+    // std::cout << "L1 Misses: " << l1_miss_cnt << std::endl;
+    //std::cout << "TLB Misses: " << tlb_miss_cnt << std::endl;
 
-    printRUsage();
+    printRUsageComma();
+    //printRUsage();
     ret = 0;
 
 End:
