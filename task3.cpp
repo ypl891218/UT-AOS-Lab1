@@ -15,9 +15,15 @@ int main(int argc, char** argv) {
     int fd_l1_miss = -1;
     int fd_tlb_miss = -1;
     int cpu_id = -1;
+    bool random = true;
+
     if (argc >= 2) {
     	cpu_id = atoi(argv[1]);
     }
+    if (argc >= 3) {
+    	random = atoi(argv[2]);
+    }
+    std::cout << random << std::endl;
     std::unique_ptr<char[]> buffer;
     
     if (fixToCPU0() != 0) {
@@ -38,7 +44,7 @@ int main(int argc, char** argv) {
     }
 
     buffer = std::make_unique<char[]>(1<<30);
-    do_mem_access(buffer.get(), 1<<30, true);
+    do_mem_access(buffer.get(), 1<<30, random);
 
     if (endRecordPerfEvent(fd_l1_access) != 0 ||
 		endRecordPerfEvent(fd_l1_miss) != 0 ||
