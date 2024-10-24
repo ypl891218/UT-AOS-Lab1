@@ -1,6 +1,7 @@
 #!/bin/bash
 
 timestamp=$(date -Iseconds)
+[ ! -d log ] && mkdir log
 log="./log/result."$timestamp
 touch $log
 
@@ -13,21 +14,31 @@ xarg3=$3
 
 make
 
-echo "./task4 -a -s $xarg1 $xarg2 $xarg3" >> $log
-./task4 -a -s $xarg1 $xarg2 $xarg3  >> $log
+run() {
+    echo "./task4 -a -s $xarg1 $xarg2 $xarg3" >> $log
+    ./task4 -a -s $xarg1 $xarg2 $xarg3  >> $log
 
-echo "./task -a -r $xarg1 $xarg2 $xarg3" >> $log
-./task4 -a -r $xarg1 $xarg2 $xarg3 >> $log
+    echo "./task -a -r $xarg1 $xarg2 $xarg3" >> $log
+    ./task4 -a -r $xarg1 $xarg2 $xarg3 >> $log
 
-echo "./task4 -f 1gb_file -s -p $xarg1 $xarg2 $xarg3" >> $log 
-./task4 -f 1gb_file -s -p $xarg1 $xarg2 $xarg3 >> $log
+    echo "./task4 -f 1gb_file -s -p $xarg1 $xarg2 $xarg3" >> $log 
+    ./task4 -f 1gb_file -s -p $xarg1 $xarg2 $xarg3 >> $log
 
-echo "./task4 -f 1gb_file -s -m $xarg1 $xarg2 $xarg3" >> $log
-./task4 -f 1gb_file -s -m $xarg1 $xarg2 $xarg3 >> $log
+    echo "./task4 -f 1gb_file -s -m $xarg1 $xarg2 $xarg3" >> $log
+    ./task4 -f 1gb_file -s -m $xarg1 $xarg2 $xarg3 >> $log
 
-echo "./task4 -f 1gb_file -r -p $xarg1 $xarg2 $xarg3" >> $log
-./task4 -f 1gb_file -r -p $xarg1 $xarg2 $xarg3 >> $log
+    echo "./task4 -f 1gb_file -r -p $xarg1 $xarg2 $xarg3" >> $log
+    ./task4 -f 1gb_file -r -p $xarg1 $xarg2 $xarg3 >> $log
 
-echo "./task4 -f 1gb_file -r -m $xarg1 $xarg2 $xarg3" >> $log
-./task4 -f 1gb_file -r -m $xarg1 $xarg2 $xarg3 >> $log
+    echo "./task4 -f 1gb_file -r -m $xarg1 $xarg2 $xarg3" >> $log
+    ./task4 -f 1gb_file -r -m $xarg1 $xarg2 $xarg3 >> $log
+}
 
+run
+
+xarg1="-P"
+run
+
+xarg2="-e"
+xarg3="-S"
+run

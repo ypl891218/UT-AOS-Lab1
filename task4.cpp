@@ -66,7 +66,7 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
 
             // Anonymous vs. File-Backed (mutually exclusive)
             case 'a':
-                if (file_backed || populate) {
+                if (file_backed /* || populate */) {
                     std::cerr << "Error: Options -a (anonymous) and -f (file-backed) are mutually exclusive.\n";
                     return 1;
                 }
@@ -101,10 +101,12 @@ static int parse_argv(int argc, char **argv, std::string &file_name, bool &seque
 
             // MAP_POPULATE (exclusive with anonymous)
             case 'P':
+                /*
                 if (anonymous) {
                     std::cerr << "Error: Options -P (Populate) and -a (anonymous) are mutually exclusive.\n";
                     return 1;
                 }
+                */
                 populate = true;
                 break;
 
@@ -248,11 +250,14 @@ int main(int argc, char** argv) {
         goto End;
     } 
 
-    std::cout << "L1 Accesses: " << l1_access_cnt << std::endl;
-    std::cout << "L1 Misses: " << l1_miss_cnt << std::endl;
-    std::cout << "TLB Misses: " << tlb_miss_cnt << std::endl;
+    // std::cout << "L1 Accesses: " << l1_access_cnt << std::endl;
+    // std::cout << "L1 Misses: " << l1_miss_cnt << std::endl;
+    // std::cout << "TLB Misses: " << tlb_miss_cnt << std::endl;
 
-    printRUsage();
+    std::cout << l1_access_cnt << "," << l1_miss_cnt << "," << tlb_miss_cnt << ",";
+
+    // printRUsage();
+    printRUsageComma();
 
     ret = 0;
 End:
